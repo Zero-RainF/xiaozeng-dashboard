@@ -5,84 +5,134 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>小曾看板</title>
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body {
-    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
-    background:#1a1410;
-    background-image: radial-gradient(ellipse at top, #2a1f17 0%, #1a1410 60%);
-    background-attachment: fixed;
-    color:#f2e8dc; padding:20px; min-height:100vh;
+  :root{
+    --primary:#6d5ef7;
+    --primary2:#8b5cf6;
+    --purple:#a855f7;
+    --blue:#3b82f6;
+    --green:#22c55e;
+    --green-bg:#ecfdf5;
+    --amber:#f59e0b;
+    --amber-bg:#fffbeb;
+    --red:#ef4444;
+    --red-bg:#fef2f2;
+    --gray:#94a3b8;
+    --gray-bg:#f1f5f9;
+    --text:#1e293b;
+    --text-sub:#64748b;
+    --border:#e2e8f0;
+    --card:#ffffff;
   }
-  .wrap { max-width:1100px; margin:0 auto; }
-  header { margin-bottom:24px; display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px;}
-  h1 { font-size:22px; font-weight:600; letter-spacing:.5px; color:#f5e6d3;}
-  .stamp { font-size:12px; color:#8c7a68; }
-
-  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin-bottom:16px;}
-  .card {
-    background:linear-gradient(160deg,#261c14 0%,#1f1711 100%);
-    border:1px solid #3a2c1f;
-    border-radius:14px; padding:18px;
-    box-shadow:0 2px 12px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,220,170,.05);
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:"Microsoft YaHei","PingFang SC","Segoe UI",sans-serif;
+    background:linear-gradient(160deg,#f6f7ff 0%,#f3f0ff 45%,#f8f5ff 100%);
+    color:var(--text);min-height:100vh;padding:0 0 40px;
   }
-  .card h2 { font-size:13px; font-weight:500; color:#b89b78; margin-bottom:14px; letter-spacing:1px; text-transform:uppercase;}
+  .page{max-width:1180px;margin:0 auto;padding:0 20px;}
 
-  .big { font-size:38px; font-weight:700; line-height:1.1; letter-spacing:-1px; color:#ffd9a3;}
-  .unit { font-size:16px; font-weight:400; color:#b89b78; margin-left:4px;}
-  .sub { font-size:12px; color:#8c7a68; margin-top:6px;}
+  /* ===== 顶部横幅 ===== */
+  .header{
+    background:linear-gradient(120deg,#4338ca 0%,#6d5ef7 40%,#8b5cf6 70%,#a855f7 100%);
+    color:#fff;padding:26px 36px;display:flex;justify-content:space-between;
+    align-items:center;flex-wrap:wrap;gap:12px;
+    box-shadow:0 4px 24px rgba(109,94,247,.35);
+    border-radius:0 0 20px 20px;margin-bottom:22px;
+  }
+  .header h1{font-size:22px;font-weight:700;letter-spacing:.5px;}
+  .header .stamp{font-size:12.5px;opacity:.9;}
 
-  .bar { height:10px; background:#2e241b; border-radius:6px; overflow:hidden; margin-top:14px;}
-  .bar > i { display:block; height:100%; border-radius:6px; transition:width .5s;}
+  /* ===== 卡片 ===== */
+  .card{
+    background:var(--card);border-radius:14px;padding:18px 20px;
+    box-shadow:0 2px 10px rgba(109,94,247,.07);border:1px solid var(--border);
+  }
+  .card h2{font-size:13px;font-weight:600;color:var(--text-sub);margin-bottom:14px;letter-spacing:.5px;}
 
-  .ok{color:#9ec96b} .warn{color:#e8a838} .bad{color:#e07a5f} .dim{color:#8c7a68}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px;margin-bottom:16px;}
 
-  .rows { display:flex; flex-direction:column; gap:9px; }
-  .row { display:flex; justify-content:space-between; align-items:center; font-size:14px;}
-  .row .k { color:#b89b78; }
-  .row .v { font-variant-numeric:tabular-nums; font-weight:600; color:#f2e8dc;}
+  /* ===== KPI ===== */
+  .kpi .label{font-size:12.5px;color:var(--text-sub);margin-bottom:7px;}
+  .kpi .value{
+    font-size:30px;font-weight:700;line-height:1.15;
+    background:linear-gradient(120deg,var(--primary),var(--purple));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .kpi .value.green{background:linear-gradient(120deg,#16a34a,#22c55e);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  .kpi .value.amber{background:linear-gradient(120deg,#d97706,#f59e0b);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  .kpi .value.red{background:linear-gradient(120deg,#dc2626,#ef4444);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  .kpi .unit{font-size:15px;font-weight:500;color:var(--text-sub);margin-left:3px;-webkit-text-fill-color:var(--text-sub);}
+  .kpi .hint{font-size:12.5px;color:var(--text-sub);margin-top:7px;}
 
-  table { width:100%; border-collapse:collapse; font-size:13px; }
-  th { text-align:left; color:#8c7a68; font-weight:500; padding:7px 6px; border-bottom:1px solid #3a2c1f; font-size:11px; letter-spacing:.5px;}
-  td { padding:8px 6px; border-bottom:1px solid #2a2018; font-variant-numeric:tabular-nums;}
-  tr.now td { background:linear-gradient(90deg,#3a2a18,#2e2216); font-weight:700; color:#ffd9a3;}
+  .bar{height:9px;background:var(--gray-bg);border-radius:6px;overflow:hidden;margin-top:13px;}
+  .bar > i{display:block;height:100%;border-radius:6px;transition:width .5s;}
 
-  .tag { display:inline-block; padding:2px 8px; border-radius:20px; font-size:11px; font-weight:600;}
-  .tag.done { background:#2d3318; color:#b8d47a;}
-  .tag.todo { background:#3a2418; color:#e8a838;}
+  /* ===== 徽标 ===== */
+  .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:600;}
+  .badge.good{background:var(--green-bg);color:#16a34a;}
+  .badge.warn{background:var(--amber-bg);color:#d97706;}
+  .badge.bad{background:var(--red-bg);color:#dc2626;}
+  .badge.gray{background:var(--gray-bg);color:var(--text-sub);}
 
-  .note { font-size:13px; color:#a89484; line-height:1.65; }
-  .hl { color:#ffd9a3; font-weight:600; }
-  footer { text-align:center; color:#6b5c4d; font-size:11px; margin-top:28px; padding-top:16px; border-top:1px solid #2a2018;}
+  /* ===== 列表行 ===== */
+  .rows{display:flex;flex-direction:column;gap:10px;}
+  .row{display:flex;justify-content:space-between;align-items:center;font-size:14px;}
+  .row .k{color:var(--text-sub);}
+  .row .v{font-variant-numeric:tabular-nums;font-weight:600;}
+
+  /* ===== 表格 ===== */
+  .table-wrap{overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  th{text-align:left;color:var(--text-sub);font-weight:600;padding:9px 8px;
+     border-bottom:1px solid var(--border);font-size:12px;white-space:nowrap;}
+  td{padding:10px 8px;border-bottom:1px solid #f1f5f9;font-variant-numeric:tabular-nums;}
+  tr.now td{background:linear-gradient(90deg,#f5f3ff,#faf9ff);font-weight:700;}
+  tr.now td:first-child{color:var(--primary);}
+  .neg{color:#dc2626;}
+  .pos{color:#16a34a;}
+
+  .insight-box{
+    background:linear-gradient(120deg,#f5f3ff,#faf9ff);border-left:3px solid var(--primary);
+    border-radius:8px;padding:13px 16px;font-size:13px;color:var(--text-sub);line-height:1.7;margin-top:14px;
+  }
+  .insight-box b{color:var(--primary);}
 
   /* ===== 登录门 ===== */
-  #lock {
-    position:fixed; inset:0; z-index:999;
-    background:#1a1410;
-    background-image: radial-gradient(ellipse at center, #2a1f17 0%, #1a1410 65%);
-    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;
+  #lock{
+    position:fixed;inset:0;z-index:999;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:15px;
+    background:linear-gradient(160deg,#f6f7ff 0%,#f3f0ff 45%,#f8f5ff 100%);
   }
-  #lock h1 { font-size:20px; color:#f5e6d3; }
-  #lock p { font-size:13px; color:#8c7a68; }
-  #pw {
-    width:260px; padding:13px 16px; font-size:16px; text-align:center;
-    background:#261c14; border:1px solid #4a3826; border-radius:10px;
-    color:#ffd9a3; outline:none; letter-spacing:3px;
+  #lock .logo{
+    width:64px;height:64px;border-radius:18px;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(120deg,#4338ca,#a855f7);color:#fff;font-size:26px;font-weight:700;
+    box-shadow:0 6px 22px rgba(109,94,247,.35);
   }
-  #pw:focus { border-color:#c98a3f; box-shadow:0 0 0 3px rgba(201,138,63,.15); }
-  #go {
-    width:260px; padding:13px; font-size:15px; font-weight:600; cursor:pointer;
-    background:linear-gradient(135deg,#c98a3f,#a86a2c); color:#1a1410; border:none; border-radius:10px;
-    transition:filter .2s;
+  #lock h1{font-size:19px;color:var(--text);font-weight:700;}
+  #lock p{font-size:13px;color:var(--text-sub);margin-top:-6px;}
+  #pw{
+    width:270px;padding:13px 16px;font-size:16px;text-align:center;letter-spacing:4px;
+    background:#fff;border:1.5px solid var(--border);border-radius:12px;color:var(--text);outline:none;
+    box-shadow:0 2px 10px rgba(109,94,247,.06);
   }
-  #go:hover { filter:brightness(1.12); }
-  #err { color:#e07a5f; font-size:13px; height:18px; }
-  #app { display:none; }
+  #pw:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(109,94,247,.12);}
+  #go{
+    width:270px;padding:13px;font-size:15px;font-weight:600;cursor:pointer;border:none;border-radius:12px;
+    background:linear-gradient(120deg,#4338ca,#8b5cf6);color:#fff;
+    box-shadow:0 4px 16px rgba(109,94,247,.35);
+  }
+  #go:hover{filter:brightness(1.08);}
+  #err{color:#dc2626;font-size:13px;height:18px;}
+  #app{display:none;}
+
+  footer{text-align:center;color:var(--gray);font-size:11.5px;margin-top:26px;}
 </style>
 </head>
 <body>
 
 <!-- 登录门 -->
 <div id="lock">
+  <div class="logo">曾</div>
   <h1>小曾的看板</h1>
   <p>请输入访问密码</p>
   <input id="pw" type="password" autocomplete="off" placeholder="••••••••">
@@ -90,86 +140,101 @@
   <div id="err"></div>
 </div>
 
-<div class="wrap" id="app">
-  <header>
+<div id="app">
+  <div class="header">
     <h1>小曾的看板</h1>
     <div class="stamp" id="stamp">—</div>
-  </header>
-
-  <div class="grid">
-    <div class="card">
-      <h2>体重</h2>
-      <div class="big" id="w-now">—<span class="unit">kg</span></div>
-      <div class="sub" id="w-sub">起点 85kg → 目标 75kg</div>
-      <div class="bar"><i id="w-bar" style="width:0%;background:linear-gradient(90deg,#c98a3f,#ffd9a3)"></i></div>
-      <div class="sub" id="w-left" style="margin-top:8px"></div>
-    </div>
-
-    <div class="card">
-      <h2>本周训练</h2>
-      <div class="big" id="t-now">0<span class="unit">/ 4</span></div>
-      <div class="sub" id="t-sub">周一腿 · 周三推 · 周五拉 · 周日全身</div>
-      <div class="bar"><i id="t-bar" style="width:0%;background:linear-gradient(90deg,#e07a5f,#e8a838)"></i></div>
-    </div>
-
-    <div class="card">
-      <h2>本月还能花</h2>
-      <div class="big" id="m-left">—<span class="unit">元</span></div>
-      <div class="sub" id="m-sub">预算 — · 已花 —</div>
-      <div class="bar"><i id="m-bar" style="width:0%;background:linear-gradient(90deg,#9ec96b,#e8a838)"></i></div>
-      <div class="sub" id="m-warn" style="margin-top:8px"></div>
-    </div>
   </div>
 
-  <div class="card" style="margin-bottom:16px;">
-    <h2>还款日历 · 距离上岸</h2>
-    <table id="tbl">
-      <thead>
-        <tr><th>月份</th><th style="text-align:right">要还</th><th style="text-align:right">到手</th><th style="text-align:right">结余</th><th style="text-align:right">状态</th></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
+  <div class="page">
 
-  <div class="grid">
-    <div class="card">
-      <h2>欠款构成</h2>
-      <div class="rows" id="plats"></div>
-      <div class="row" style="margin-top:14px;padding-top:12px;border-top:1px solid #3a2c1f;">
-        <span class="k">合计</span><span class="v bad" id="debt-total">—</span>
+    <!-- KPI 行 -->
+    <div class="grid">
+      <div class="card kpi">
+        <div class="label">当前体重</div>
+        <div class="value" id="w-now">—<span class="unit">kg</span></div>
+        <div class="hint" id="w-sub">起点 85kg → 目标 75kg</div>
+        <div class="bar"><i id="w-bar" style="width:0%;background:linear-gradient(90deg,#6d5ef7,#a855f7)"></i></div>
+        <div class="hint" id="w-left"></div>
+      </div>
+
+      <div class="card kpi">
+        <div class="label">本周训练</div>
+        <div class="value" id="t-now">0<span class="unit">/ 4</span></div>
+        <div class="hint">周一腿 · 周三推 · 周五拉 · 周日全身</div>
+        <div class="bar"><i id="t-bar" style="width:0%;background:linear-gradient(90deg,#f59e0b,#fbbf24)"></i></div>
+      </div>
+
+      <div class="card kpi">
+        <div class="label">本月还能花</div>
+        <div class="value" id="m-left">—<span class="unit">元</span></div>
+        <div class="hint" id="m-sub">预算 — · 已花 —</div>
+        <div class="bar"><i id="m-bar" style="width:0%;background:linear-gradient(90deg,#6d5ef7,#a855f7)"></i></div>
+        <div class="hint" id="m-warn"></div>
       </div>
     </div>
 
-    <div class="card">
-      <h2>手上现金（别动）</h2>
-      <div class="big" id="cash">—<span class="unit">元</span></div>
-      <div class="note" style="margin-top:12px">
-        这 2,000 是应急钱。本月 900 花完之后才动它。<br>
-        <span class="hl">动了它，10月出事就只能再借 —— 那就回到起点了。</span>
+    <!-- 还款日历 -->
+    <div class="card" style="margin-bottom:16px;">
+      <h2>还款日历 · 距离上岸</h2>
+      <div class="table-wrap">
+        <table id="tbl">
+          <thead>
+            <tr>
+              <th>月份</th>
+              <th style="text-align:right">要还</th>
+              <th style="text-align:right">到手</th>
+              <th style="text-align:right">结余</th>
+              <th style="text-align:right">状态</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="insight-box" id="insight"></div>
+    </div>
+
+    <!-- 下方三卡 -->
+    <div class="grid">
+      <div class="card">
+        <h2>欠款构成</h2>
+        <div class="rows" id="plats"></div>
+        <div class="row" style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);">
+          <span class="k" style="font-weight:600;">合计</span>
+          <span class="v" style="color:#dc2626;font-size:16px;" id="debt-total">—</span>
+        </div>
+      </div>
+
+      <div class="card kpi">
+        <div class="label">手上现金（别动）</div>
+        <div class="value green" id="cash">—<span class="unit">元</span></div>
+        <div class="insight-box" style="margin-top:12px;">
+          应急钱。本月额度花完之后才动它。<br>
+          <b>动了它，10月出事就只能再借 —— 那就回到起点了。</b>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>十个月目标</h2>
+        <div class="rows">
+          <div class="row"><span class="k">体重 &lt; 75kg</span><span class="badge gray">进行中</span></div>
+          <div class="row"><span class="k">每周四练</span><span class="badge gray">进行中</span></div>
+          <div class="row"><span class="k">学会游泳</span><span class="badge gray">待办</span></div>
+          <div class="row"><span class="k">学会 Hip-hop</span><span class="badge gray">元旦后</span></div>
+          <div class="row"><span class="k">去痣手术</span><span class="badge warn">10月面诊</span></div>
+          <div class="row"><span class="k">牙齿手术</span><span class="badge gray">随时</span></div>
+          <div class="row"><span class="k">债务还清</span><span class="badge warn">2027-09</span></div>
+        </div>
       </div>
     </div>
 
-    <div class="card">
-      <h2>十个月目标</h2>
-      <div class="rows">
-        <div class="row"><span class="k">体重 &lt; 75kg</span><span class="tag todo">进行中</span></div>
-        <div class="row"><span class="k">每周四练</span><span class="tag todo">进行中</span></div>
-        <div class="row"><span class="k">学会游泳</span><span class="tag todo">待办</span></div>
-        <div class="row"><span class="k">学会 Hip-hop</span><span class="tag todo">元旦后</span></div>
-        <div class="row"><span class="k">去痣手术</span><span class="tag todo">10月面诊</span></div>
-        <div class="row"><span class="k">牙齿手术</span><span class="tag todo">随时</span></div>
-        <div class="row"><span class="k">债务还清</span><span class="tag todo">2027-09</span></div>
-      </div>
-    </div>
+    <footer>数据更新：<span id="stamp2">—</span> · 刷新页面即可看到最新</footer>
   </div>
-
-  <footer>数据更新：<span id="stamp2">—</span> · 刷新页面即可看到最新</footer>
 </div>
 
 <script src="data.js"></script>
 <script>
-// ===== 密码门 =====
-const PWD_HASH = "7dde02ec89464141dce75583abbe3dc2e6e1db16efc75c7e9661c44fb5f20705";   // 构建时注入
+const PWD_HASH = "7dde02ec89464141dce75583abbe3dc2e6e1db16efc75c7e9661c44fb5f20705";
 const SALT = "xiaozeng_rian_2026";
 
 async function sha256(s){
@@ -177,7 +242,6 @@ async function sha256(s){
   const d = await crypto.subtle.digest('SHA-256', buf);
   return Array.from(new Uint8Array(d)).map(b=>b.toString(16).padStart(2,'0')).join('');
 }
-
 async function unlock(){
   const v = document.getElementById('pw').value;
   if(!v) return;
@@ -192,61 +256,62 @@ async function unlock(){
     document.getElementById('pw').value='';
   }
 }
-
 document.getElementById('go').addEventListener('click', unlock);
 document.getElementById('pw').addEventListener('keydown', e=>{ if(e.key==='Enter') unlock(); });
 
-// ===== 渲染 =====
 function render(){
   const D = window.DASH;
-  const money = n => n.toLocaleString('zh-CN', {maximumFractionDigits:0});
+  const money = n => n.toLocaleString('zh-CN',{maximumFractionDigits:0});
   const el = id => document.getElementById(id);
-
-  document.getElementById('stamp').textContent = '更新于 ' + D.updatedAt;
-  document.getElementById('stamp2').textContent = D.updatedAt;
+  el('stamp').textContent = '更新于 ' + D.updatedAt;
+  el('stamp2').textContent = D.updatedAt;
 
   // 体重
   (function(){
     const b = D.body;
-    if (b.currentWeight == null) {
+    if(b.currentWeight == null){
       el('w-now').innerHTML = '待称<span class="unit">kg</span>';
-      el('w-sub').textContent = '起点 85kg → 目标 75kg（周日首次称重）';
-      el('w-left').textContent = '还差 10.0 kg';
+      el('w-sub').textContent = '起点 85kg → 目标 75kg';
+      el('w-left').textContent = '还差 10.0 kg · 周日首次称重';
       el('w-bar').style.width = '0%';
       return;
     }
     const total = b.startWeight - b.goalWeight;
-    const done  = b.startWeight - b.currentWeight;
-    const pct   = Math.max(0, Math.min(100, done / total * 100));
-    el('w-now').innerHTML = b.currentWeight.toFixed(1) + '<span class="unit">kg</span>';
+    const done = b.startWeight - b.currentWeight;
+    const pct = Math.max(0, Math.min(100, done/total*100));
+    const val = el('w-now');
+    val.innerHTML = b.currentWeight.toFixed(1) + '<span class="unit">kg</span>';
     el('w-sub').textContent = '起点 ' + b.startWeight + 'kg → 目标 ' + b.goalWeight + 'kg';
     el('w-bar').style.width = pct + '%';
     const left = b.currentWeight - b.goalWeight;
-    el('w-left').innerHTML = left <= 0
-      ? '<span class="ok">已达标 🎉</span>'
-      : '还差 <span class="hl">' + left.toFixed(1) + ' kg</span> · 已完成 ' + pct.toFixed(0) + '%';
+    if(left <= 0){ el('w-left').innerHTML = '<b style="color:#16a34a">已达标 🎉</b>'; }
+    else { el('w-left').innerHTML = '还差 <b style="color:#6d5ef7">' + left.toFixed(1) + ' kg</b> · 已完成 ' + pct.toFixed(0) + '%'; }
   })();
 
   // 训练
   (function(){
     const b = D.body;
     el('t-now').innerHTML = b.thisWeekDone + '<span class="unit">/ ' + b.weeklyTarget + '</span>';
-    el('t-bar').style.width = Math.min(100, b.thisWeekDone / b.weeklyTarget * 100) + '%';
+    el('t-bar').style.width = Math.min(100, b.thisWeekDone/b.weeklyTarget*100) + '%';
   })();
 
   // 钱
   (function(){
     const m = D.money;
     const left = m.monthBudget - m.monthSpent;
-    const pct  = m.monthSpent / m.monthBudget * 100;
-    el('m-left').innerHTML = (left < 0 ? '超支 ' + money(-left) : money(left)) + '<span class="unit">元</span>';
+    const pct = m.monthSpent / m.monthBudget * 100;
+    const v = el('m-left');
+    v.innerHTML = (left < 0 ? '超支 ' + money(-left) : money(left)) + '<span class="unit">元</span>';
+    v.className = 'value' + (pct>=100 ? ' red' : pct>=70 ? ' amber' : '');
     el('m-sub').textContent = '预算 ' + money(m.monthBudget) + ' · 已花 ' + money(m.monthSpent);
     const bar = el('m-bar');
-    bar.style.width = Math.min(100, pct) + '%';
-    bar.style.background = pct >= 100 ? '#e07a5f' : pct >= 70 ? 'linear-gradient(90deg,#e8a838,#e07a5f)' : 'linear-gradient(90deg,#9ec96b,#e8a838)';
-    el('m-warn').innerHTML = pct >= 100 ? '<span class="bad">超支了。今天起停一切非必要支出。</span>'
-      : pct >= 70 ? '<span class="warn">用了七成，剩下的省着点。</span>'
-      : '<span class="ok">还在轨道上。</span>';
+    bar.style.width = Math.min(100,pct) + '%';
+    bar.style.background = pct>=100 ? 'linear-gradient(90deg,#dc2626,#ef4444)'
+      : pct>=70 ? 'linear-gradient(90deg,#d97706,#f59e0b)'
+      : 'linear-gradient(90deg,#6d5ef7,#a855f7)';
+    el('m-warn').innerHTML = pct>=100 ? '<span class="badge bad">超支了，今天起停一切非必要支出</span>'
+      : pct>=70 ? '<span class="badge warn">用了七成，剩下的省着点</span>'
+      : '<span class="badge good">还在轨道上</span>';
   })();
 
   el('cash').innerHTML = money(D.money.cashOnHand) + '<span class="unit">元</span>';
@@ -255,7 +320,7 @@ function render(){
   (function(){
     const box = el('plats');
     box.innerHTML='';
-    D.money.platforms.forEach(p => {
+    D.money.platforms.forEach(p=>{
       box.insertAdjacentHTML('beforeend',
         `<div class="row"><span class="k">${p.name}</span><span class="v">${money(p.amt)}</span></div>`);
     });
@@ -267,24 +332,30 @@ function render(){
     const tb = document.querySelector('#tbl tbody');
     tb.innerHTML='';
     const nowKey = D.money.currentMonth.replace('月','').slice(0,7);
-    D.money.months.forEach(m => {
+    let cnt = 0, last = null;
+    D.money.months.forEach(m=>{
       const bal = m.income - m.pay;
       const isNow = m.ym === nowKey;
-      const status = bal < 0 ? '<span class="tag todo">紧</span>'
-        : bal > 5000 ? '<span class="tag done">宽</span>' : '<span class="tag done">可</span>';
+      if(isNow) cnt = D.money.months.filter(x=>x.ym >= m.ym).length;
+      last = m.ym;
+      const badge = bal < 0 ? '<span class="badge bad">紧</span>'
+        : bal > 5000 ? '<span class="badge good">宽</span>' : '<span class="badge gray">可</span>';
       tb.insertAdjacentHTML('beforeend',
         `<tr class="${isNow?'now':''}">
-          <td>${m.ym}${isNow?' ← 本月':''}</td>
+          <td>${m.ym}${isNow?' · 本月':''}</td>
           <td style="text-align:right">${money(m.pay)}</td>
           <td style="text-align:right">${money(m.income)}</td>
-          <td style="text-align:right" class="${bal<0?'bad':'ok'}">${bal>0?'+':''}${money(bal)}</td>
-          <td style="text-align:right">${status}</td>
+          <td style="text-align:right" class="${bal<0?'neg':'pos'}">${bal>0?'+':''}${money(bal)}</td>
+          <td style="text-align:right">${badge}</td>
         </tr>`);
     });
+    el('insight').innerHTML =
+      `距离上岸还有 <b>${cnt} 个月</b>（${last} 全部结清）。` +
+      `<br>本月是最紧的一个月，之后就一路转宽。` +
+      `<br><b>2027年2月那笔额外收入，是你整张表唯一的缓冲 —— 别花。</b>`;
   })();
 }
 
-// 已登录过就跳过
 if(sessionStorage.getItem('zx_ok') === '1'){
   document.getElementById('lock').style.display='none';
   document.getElementById('app').style.display='block';
