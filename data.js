@@ -3,7 +3,7 @@
 // 刷新看板页面即可看到最新数据
 
 window.DASH = {
-  updatedAt: "2026-09-30 23:59",
+  updatedAt: "2026-10-08 12:30",
 
   // ============ 身体 ============
   body: {
@@ -24,8 +24,8 @@ window.DASH = {
     currentMonth: "2026-10月",
     monthIncome: 17320,     // 10月到手
     monthRepay: 16371,      // 10月还款（含房租）
-    monthBudget: 900,       // 本月可支配额度
-    monthSpent: 0,          // 本月已花
+    monthBudget: 2400,       // 本月可支配额度
+    monthSpent: 1620,          // 本月已花
     debtTotal: 84378,       // 债务总额
     rent: 1800,
 
@@ -61,6 +61,6 @@ window.DASH = {
     log: [
       // {date:"2026-09-30", score:6, note:"..."}
     ],
-    lastNote: "最近情绪一直不太好"
+    lastNote: "10月上旬断联8天；删了半个朋友；花钱又超"
   }
 };
