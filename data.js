@@ -3,7 +3,7 @@
 // 刷新看板页面即可看到最新数据
 
 window.DASH = {
-  updatedAt: "2026-10-08 12:30",
+  updatedAt: "2026-10-08 12:45",
 
   // ============ 身体 ============
   body: {
@@ -11,9 +11,7 @@ window.DASH = {
     goalWeight: 75,         // 目标 kg
     currentWeight: null,    // 最新体重，周日填入
     lastWaist: null,        // 最新腰围 cm
-    weightLog: [
-      // {date:"2026-10-04", kg:null, waist:null}
-    ],
+    weightLog: [],
     weeklyTarget: 4,        // 每周训练次数
     thisWeekDone: 0,        // 本周已完成
   },
@@ -24,10 +22,21 @@ window.DASH = {
     currentMonth: "2026-10月",
     monthIncome: 17320,     // 10月到手
     monthRepay: 16371,      // 10月还款（含房租）
-    monthBudget: 2400,       // 本月可支配额度
-    monthSpent: 1620,          // 本月已花
-    debtTotal: 84378,       // 债务总额
+    monthBudget: 2400,      // 本月可支配额度
+    monthSpent: 1620,       // 本月已花
+    debtTotal: 84378,
     rent: 1800,
+    daysLeft: 23,           // 距10月底
+
+    // -------- 逐笔消费明细 --------
+    // 金额：正数 = 支出
+    expenses: [
+      { date: "10-01", item: "（1-6日累计，未细分）", amt: 1500, cat: "其他" },
+      { date: "10-07", item: "打车",       amt:   60, cat: "交通" },
+      { date: "10-07", item: "宵夜",       amt:   50, cat: "吃" },
+      { date: "10-07", item: "买水",       amt:    5, cat: "其他" },
+      { date: "10-08", item: "买水",       amt:    5, cat: "其他" },
+    ],
 
     // 月度还款 + 收入（2026-10 → 2027-09）
     months: [
@@ -58,9 +67,7 @@ window.DASH = {
 
   // ============ 情绪 / 感情 ============
   mood: {
-    log: [
-      // {date:"2026-09-30", score:6, note:"..."}
-    ],
+    log: [],
     lastNote: "10月上旬断联8天；删了半个朋友；花钱又超"
   }
 };
