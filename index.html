@@ -126,6 +126,80 @@
   #app{display:none;}
 
   footer{text-align:center;color:var(--gray);font-size:11.5px;margin-top:26px;}
+
+  /* ============================================
+     手机优先适配
+     ============================================ */
+  @media (max-width: 640px){
+    body{ padding:0 0 24px; }
+
+    /* 顶部：竖排，标题大一点，时间不挤掉 */
+    .header{
+      padding:18px 18px 16px;
+      flex-direction:column;
+      align-items:flex-start;
+      gap:6px;
+      border-radius:0 0 16px 16px;
+      margin-bottom:14px;
+    }
+    .header h1{ font-size:19px; }
+    .header .stamp{ font-size:11.5px; opacity:.85; }
+
+    .page{ padding:0 12px; }
+
+    /* 卡片：更紧凑，圆角小一点 */
+    .card{ padding:14px 14px; border-radius:12px; }
+    .card h2{ font-size:12px; margin-bottom:11px; }
+
+    /* 卡片一律竖排（不要并排挤） */
+    .grid{
+      grid-template-columns:1fr !important;
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    /* 大数字稍微收一点，但保持醒目 */
+    .kpi .value{ font-size:26px; }
+    .kpi .value .unit{ font-size:13px; }
+    .kpi .label{ font-size:11.5px; }
+    .kpi .hint{ font-size:11.5px; }
+
+    /* 开销板块的四个小数字排成 2x2 */
+    .grid[style*="minmax(180px"]{
+      grid-template-columns:1fr 1fr !important;
+      gap:10px !important;
+    }
+    #sp-total, #sp-left, #sp-perday, #sp-count{ font-size:22px !important; }
+
+    /* 表格：手机上字号大一点、更易读，允许横滑 */
+    .table-wrap{
+      margin:0 -14px;
+      padding:0 14px;
+      -webkit-overflow-scrolling:touch;
+    }
+    table{ font-size:13px; min-width:100%; }
+    th{ font-size:11px; padding:8px 6px; }
+    td{ padding:9px 6px; }
+
+    /* 还款表在手机上压窄一点列宽，尽量不横滑 */
+    #tbl th, #tbl td{ padding:8px 4px; font-size:12px; }
+    #tbl th:first-child, #tbl td:first-child{ font-size:11.5px; }
+
+    /* 分类徽标小一点 */
+    .badge{ font-size:10.5px; padding:2px 8px; }
+
+    /* 底部说明 */
+    .insight-box{ font-size:12px; padding:11px 13px; line-height:1.65; }
+    footer{ font-size:10.5px; margin-top:18px; }
+  }
+
+  /* 超小屏再收一档 */
+  @media (max-width: 380px){
+    .header h1{ font-size:17px; }
+    .kpi .value{ font-size:23px; }
+    #sp-total, #sp-left, #sp-perday, #sp-count{ font-size:19px !important; }
+    #tbl th, #tbl td{ font-size:11px; padding:7px 3px; }
+  }
 </style>
 </head>
 <body>
