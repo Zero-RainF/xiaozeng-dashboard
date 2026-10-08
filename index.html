@@ -174,6 +174,37 @@
       </div>
     </div>
 
+    <!-- 开销明细 -->
+    <div class="card" style="margin-bottom:16px;">
+      <h2>开销明细 · 一笔一笔</h2>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:16px;">
+        <div class="kpi" style="padding:0;">
+          <div class="label">本月已花</div>
+          <div class="value" id="sp-total" style="font-size:26px;">—</div>
+        </div>
+        <div class="kpi" style="padding:0;">
+          <div class="label">还能花</div>
+          <div class="value green" id="sp-left" style="font-size:26px;">—</div>
+        </div>
+        <div class="kpi" style="padding:0;">
+          <div class="label">日均可用</div>
+          <div class="value" id="sp-perday" style="font-size:26px;">—</div>
+        </div>
+        <div class="kpi" style="padding:0;">
+          <div class="label">笔数</div>
+          <div class="value" id="sp-count" style="font-size:26px;">—</div>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table id="sp-tbl">
+          <thead>
+            <tr><th>日期</th><th>项目</th><th>分类</th><th style="text-align:right">金额</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
     <!-- 还款日历 -->
     <div class="card" style="margin-bottom:16px;">
       <h2>还款日历 · 距离上岸</h2>
@@ -315,6 +346,43 @@ function render(){
   })();
 
   el('cash').innerHTML = money(D.money.cashOnHand) + '<span class="unit">元</span>';
+
+  // ===== 开销明细 =====
+  (function(){
+    const m = D.money;
+    const list = (m.expenses || []).slice().sort((a,b)=> (a.date<b.date?-1:1));
+    const total = list.reduce((s,e)=>s+e.amt, 0);
+    const left = m.monthBudget - total;
+    const days = m.daysLeft || 1;
+    const perday = left / days;
+
+    el('sp-total').innerHTML = money(total) + '<span class="unit">元</span>';
+    const lv = el('sp-left');
+    lv.innerHTML = (left<0? '超支 '+money(-left) : money(left)) + '<span class="unit">元</span>';
+    lv.className = 'value ' + (left<0?'red':(left/m.monthBudget<0.3?'amber':'green'));
+    el('sp-perday').innerHTML = (perday<0?'—':perday.toFixed(0)) + '<span class="unit">元</span>';
+    el('sp-count').innerHTML = list.length + '<span class="unit">笔</span>';
+
+    const tb = document.querySelector('#sp-tbl tbody');
+    tb.innerHTML = '';
+    // 分类配色
+    const catColor = { '喝酒':'#a855f7', '吃':'#f59e0b', '交通':'#3b82f6', '其他':'#94a3b8' };
+    list.forEach(e=>{
+      const c = catColor[e.cat] || '#94a3b8';
+      tb.insertAdjacentHTML('beforeend',
+        `<tr>
+          <td>${e.date}</td>
+          <td>${e.item}</td>
+          <td><span class="badge" style="background:${c}1a;color:${c}">${e.cat}</span></td>
+          <td style="text-align:right">${money(e.amt)}</td>
+        </tr>`);
+    });
+    tb.insertAdjacentHTML('beforeend',
+      `<tr style="font-weight:700;border-top:2px solid var(--border)">
+        <td colspan="3">合计</td>
+        <td style="text-align:right">${money(total)}</td>
+      </tr>`);
+  })();
 
   // 平台
   (function(){
