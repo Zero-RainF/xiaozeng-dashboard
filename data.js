@@ -3,7 +3,7 @@
 // 刷新看板页面即可看到最新数据
 
 window.DASH = {
-  updatedAt: "2026-10-08 12:45",
+  updatedAt: "2026-10-08 14:10",
 
   // ============ 身体 ============
   body: {
@@ -23,7 +23,7 @@ window.DASH = {
     monthIncome: 17320,     // 10月到手
     monthRepay: 16371,      // 10月还款（含房租）
     monthBudget: 2400,      // 本月可支配额度
-    monthSpent: 1620,       // 本月已花
+    monthSpent: 1632,       // 本月已花
     debtTotal: 84378,
     rent: 1800,
     daysLeft: 23,           // 距10月底
@@ -36,6 +36,7 @@ window.DASH = {
       { date: "10-07", item: "宵夜",       amt:   50, cat: "吃" },
       { date: "10-07", item: "买水",       amt:    5, cat: "其他" },
       { date: "10-08", item: "买水",       amt:    5, cat: "其他" },
+      { date: "10-08", item: "零食",       amt:   12, cat: "吃" },
     ],
 
     // 月度还款 + 收入（2026-10 → 2027-09）
