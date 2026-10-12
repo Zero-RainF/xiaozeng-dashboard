@@ -3,15 +3,17 @@
 // 刷新看板页面即可看到最新数据
 
 window.DASH = {
-  updatedAt: "2026-10-08 14:10",
+  updatedAt: "2026-10-08 15:30",
 
   // ============ 身体 ============
   body: {
     startWeight: 85,        // 起点 kg (2026-09-30)
     goalWeight: 75,         // 目标 kg
-    currentWeight: null,    // 最新体重，周日填入
+    currentWeight: 82.5,    // 最新体重 (165斤, 2026-10-08)
     lastWaist: null,        // 最新腰围 cm
-    weightLog: [],
+    weightLog: [
+      { date: "2026-10-08", kg: 82.5, waist: null },
+    ],
     weeklyTarget: 4,        // 每周训练次数
     thisWeekDone: 0,        // 本周已完成
   },
